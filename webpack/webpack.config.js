@@ -1,12 +1,7 @@
 const path = require('path');
 
-const webpack = require('webpack');
-
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-// const BundleAnalyzer = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -64,7 +59,7 @@ module.exports = {
       '.graphql',
       '.gql',
       '.mjs',
-      '.json',
+      '.json'
     ],
   },
   devServer: {
@@ -118,7 +113,6 @@ module.exports = {
       // },
       {
         test: /\.(js|tsx|ts)$/,
-        // memory leaks disappear with this (I DON'T KNOW WHY!)
         include: [
           path.join(__dirname, '../src')
         ],
@@ -131,33 +125,12 @@ module.exports = {
           },
         ],
       },
-      {
-        test: /\.(graphql|gql)$/,
-        // memory leaks disappear with this
-        include: [
-          path.join(__dirname, '../src')
-        ],
-        loader: 'graphql-tag/loader',
-      },
-      {
-        test: /\.svg$/,
-        // memory leaks disappear with this
-        include: [
-          path.join(__dirname, '../src')
-        ],
-        loader: 'svg-react-loader',
-      },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin(),
     new HtmlWebpackHarddiskPlugin({
       alwaysWriteToDisk: true,
-    }),
-    new LodashModuleReplacementPlugin({
-      collections: true,
-      shorthands: true,
-      flattening: true,
     }),
 
     new CircularDependencyPlugin({
@@ -168,11 +141,6 @@ module.exports = {
       // allow import cycles that include an asyncronous import,
       // e.g. via import(/* webpackMode: "weak" */ './file.js')
       allowAsyncCycles: false,
-    }),
-
-    new webpack.IgnorePlugin({
-      resourceRegExp: /^\.\/locale$/,
-      contextRegExp: /moment$/,
     }),
   ],
 }
